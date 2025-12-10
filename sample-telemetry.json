@@ -1,0 +1,16 @@
+[
+  {
+    "machineId": "SK1-00021",
+    "temperatureC": 24.5,
+    "status": "OK",
+    "lastErrorCode": null,
+    "tsUtc": "2025-01-01T10:00:00Z"
+  },
+  {
+    "machineId": "SK1-00022",
+    "temperatureC": 32.1,
+    "status": "Error",
+    "lastErrorCode": "MOTOR_JAM",
+    "tsUtc": "2025-01-01T10:01:30Z"
+  }
+]
