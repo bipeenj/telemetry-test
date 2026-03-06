@@ -1,0 +1,66 @@
+# .NET Core
+bin/
+obj/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.tmp
+*.log
+
+# Rider
+.idea/
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# macOS
+.DS_Store
+
+# Linux
+*~
+
+# NuGet
+*.nupkg
+*.snupkg
+packages/
+
+# Build results
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+*.dll
+*.exe
+*.pdb
+
+# User-specific files
+*.user
+*.suo
+*.cache
+*.log
+
+# Test results
+TestResults/
+*.trx
+
+# Publish
+publish/
+*.publishsettings
+
+# Azure
+*.azurePubxml
+
+# SQL Server
+*.mdf
+*.ldf
+
+# Entity Framework
+*.edmx
+
+# Temporary files
+*.tmp
+*.temp
