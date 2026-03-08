@@ -1,13 +1,42 @@
-var builder = WebApplication.CreateBuilder(args);
+using Azure.Core;
+using Azure.Identity;
+using Microsoft.EntityFrameworkCore; // Added this using directive  
+using Npgsql;
+using System;
+using TelemetryApi.Model;
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<MAchineDbContext>(options =>
+{
+    var connString = builder.Configuration.GetConnectionString("Postgres");
+
+    if (builder.Environment.IsDevelopment())
+    {
+        
+    }
+    else
+    {
+        var credential = new DefaultAzureCredential();
+
+        var token = credential.GetToken(
+            new TokenRequestContext(
+                new[] { "https://ossrdbms-aad.database.windows.net/.default" }));
+        connString = $"{connString};Password={token}";
+
+
+    }
+    var conn = new NpgsqlConnection(connString);
+    conn.Open();
+});
+// Add services to the container.  
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle  
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configure the HTTP request pipeline.  
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -16,18 +45,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+app.UseAuthentication();
 
-app.MapGet("/weatherforecast", () =>
-{
-   
-})
-.WithName("GetMachines")
-.WithOpenApi();
+app.UseAuthorization();
 
 app.Run();
-
-
