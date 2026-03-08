@@ -14,11 +14,12 @@ namespace TelemetryApi.Model
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<MachineStatus>().ToTable("machines");
+            modelBuilder.Entity<MachineEntry>().ToTable("machines");
             modelBuilder.Entity<Telemetry>().ToTable("telemetrysnapshots");
         }
 
-        public DbSet<MachineStatus> Machines { get; set; }
+        public DbSet<MachineEntry> Machines { get; set; }
         public DbSet<Telemetry> Telemetries { get; set; }
+       
     }
 }

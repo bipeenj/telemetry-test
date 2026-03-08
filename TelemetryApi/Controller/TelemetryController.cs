@@ -2,6 +2,8 @@
 using TelemetryApi.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Identity.Client.TelemetryCore.TelemetryClient;
+using System.Reflection.PortableExecutable;
 namespace TelemetryApi.Controller
 {
     //[Authorize]
@@ -19,15 +21,44 @@ namespace TelemetryApi.Controller
         [HttpGet]
         public async Task<IActionResult> GetMachines()
         {
-            var machines = await _context.Machines?.ToListAsync();
+            var machines = _context.Telemetries.GroupBy(t => t.machineid)
+               .Select(g => g
+            .OrderByDescending(m => m.report_time)
+            .FirstOrDefault()).Select(t => new
+            {
+                MachineId = t.machineid,
+                LatestStatus = t.status,
+                LatestTemperatureC = t.temperaturec,
+                LatestLastErrorCode = t.errorcode,
+                HasAlert = t.status != "OK" || t.temperaturec > 28
+            }).ToList();
             return Ok(machines);
         }
-        [Route("api/Tele")]
-        [HttpGet]
-        public async Task<IActionResult> GetTelemetry()
+        [Route("api/Telemetry")]
+        [HttpPost]
+        public async Task<IActionResult> Telemetry([FromBody] List<Telemetry> telemetry)
         {
-            var telemetries = await _context.Telemetries?.ToListAsync();
-            return Ok(telemetries);
+            foreach (var entry in telemetry)
+            {
+                // Update latest per machine
+                var machine = await _context.Machines
+                    .FirstOrDefaultAsync(m => m.machineid == entry.machineid);
+
+                if (machine == null)
+                {
+                    machine = new MachineEntry
+                    {
+                        machineid = entry.machineid,
+                        createdat = entry.report_time,
+                    };
+                    _context.Machines.Add(machine);
+                }
+                entry.id = _context.Telemetries.Count()+1;
+                _context.Telemetries.Add(entry);
+            }
+
+            await _context.SaveChangesAsync();
+            return Ok(new { message = "Telemetry processed successfully" });
         }
     }
 }
