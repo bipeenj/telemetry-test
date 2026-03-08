@@ -40,3 +40,4 @@ npm run dev
 ```sh
 npm run build
 ```
+### P.S. we can use Vuex or Pinia for state management for complex UI and can use SignalR for real time push updates from backend
