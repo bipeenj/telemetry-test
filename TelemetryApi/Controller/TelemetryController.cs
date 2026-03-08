@@ -21,7 +21,8 @@ namespace TelemetryApi.Controller
         [HttpGet]
         public async Task<IActionResult> GetMachines()
         {
-            var machines = _context.Telemetries.GroupBy(t => t.machineid)
+
+            var machines = _context.Telemetries.GroupBy(t => t.machineid).AsEnumerable()
                .Select(g => g
             .OrderByDescending(m => m.report_time)
             .FirstOrDefault()).Select(t => new
