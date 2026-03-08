@@ -17,7 +17,7 @@ namespace TelemetryApi.Controller
         [HttpGet]
         public async Task<IActionResult> GetMachines()
         {
-            var machines = await _context.Machines.ToListAsync();
+            var machines = await _context.Machines?.ToListAsync();
             return Ok(machines);
         }
     }

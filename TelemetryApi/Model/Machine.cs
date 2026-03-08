@@ -1,13 +1,15 @@
-﻿namespace TelemetryApi.Model
+using System.ComponentModel.DataAnnotations;
+
+namespace TelemetryApi.Model
 {
     public class MachineStatus
     {
-        public string MachineId { get; set; }
-        public string Status { get; set; }
-        public double TemperatureC { get; set; }
-        public string LastErrorCode { get; set; }
+        [Key]
+        public string machineid { get; set; }
+        public string address { get; set; }
+        
+        public DateTime createdat { get; set; }
 
-        public bool HasAlert =>
-            Status != "OK" || TemperatureC > 28;
+        
     }
 }

@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using System.Reflection.PortableExecutable;
 
 namespace TelemetryApi.Model
@@ -10,6 +10,12 @@ namespace TelemetryApi.Model
         public MAchineDbContext(DbContextOptions<MAchineDbContext> options)
             : base(options)
         {
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<MachineStatus>().ToTable("machines");
+            modelBuilder.Entity<Telemetry>().ToTable("telemetrysnapshots");
         }
 
         public DbSet<MachineStatus> Machines { get; set; }

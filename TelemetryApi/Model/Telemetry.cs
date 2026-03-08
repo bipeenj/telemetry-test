@@ -1,13 +1,16 @@
-﻿namespace TelemetryApi.Model
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace TelemetryApi.Model
 {
     public class Telemetry
     {
-        
-            public string MachineId { get; set; }
-            public string Status { get; set; }
-            public double TemperatureC { get; set; }
-            public string LastErrorCode { get; set; }
-            public DateTime Timestamp { get; set; }
+            [Key]
+            public int id { get; set; }
+            public string machineid { get; set; }
+            public string status { get; set; }
+            public double temperaturec { get; set; }
+            public string errorcode { get; set; }
+            public DateTime report_time { get; set; }
         
     }
 }
