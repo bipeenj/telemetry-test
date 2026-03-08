@@ -1,7 +1,7 @@
 # .NET Core
 bin/
 obj/
-
+TelemetryApi/wwwroot
 # Visual Studio
 .vs/
 *.user

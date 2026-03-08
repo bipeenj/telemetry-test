@@ -91,7 +91,21 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 
 app.UseAuthorization();
+app.UseDefaultFiles();  // Serves index.html by default
+app.UseStaticFiles();
 
+// Optional: fallback to index.html for SPA routes
+app.Use(async (context, next) =>
+{
+    await next();
+
+    if (context.Response.StatusCode == 404 &&
+        !Path.HasExtension(context.Request.Path.Value ?? ""))
+    {
+        context.Request.Path = "/index.html";
+        await next();
+    }
+});
 app.MapControllers();
 
 app.Run();
