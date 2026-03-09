@@ -4,9 +4,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Identity.Client.TelemetryCore.TelemetryClient;
 using System.Reflection.PortableExecutable;
+using Microsoft.Identity.Web;
 namespace TelemetryApi.Controller
 {
-    //[Authorize]
+    [Authorize]
     [ApiController]
     
     public class TelemetryController : ControllerBase
@@ -17,10 +18,15 @@ namespace TelemetryApi.Controller
         {
             _context = context;
         }
+        [AllowAnonymous]
         [Route("api/machines")]
         [HttpGet]
         public async Task<IActionResult> GetMachines()
         {
+            if(User!=null && User.Claims!=null)
+            {
+
+            }
 
             var machines = _context.Telemetries.GroupBy(t => t.machineid).AsEnumerable()
                .Select(g => g

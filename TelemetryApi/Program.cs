@@ -36,29 +36,9 @@ builder.Services.AddEndpointsApiExplorer();
 
 var tenantId = builder.Configuration["AzureAd:TenantId"];
 var clientId = builder.Configuration["AzureAd:ClientId"];
-//builder.Services
-//    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-//    .AddMicrosoftIdentityWebApi(builder.Configuration);
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidIssuers = new[]
-         {
-            $"https://sts.windows.net/{tenantId}/",
-            $"https://login.microsoftonline.com/{tenantId}/v2.0"
-        },
-
-            ValidAudiences = new[]
-         {
-            $"api://{clientId}",
-            $"{clientId}"
-        }
-        };
-    });
-
+builder.Services
+.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+.AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
 builder.Services.AddSwaggerGen(options =>
 {
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
